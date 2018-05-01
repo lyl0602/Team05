@@ -28,6 +28,8 @@ class KPS():
 		u_type = input("Hi! Welcome to Keep Pitt Safe!\n\nEnter\n1 - Student\n2 - Working Professional\n")
 		self.job = u_type
 		print("You entered: " + self.user[u_type] + "\n\n")
+		child_type = input("Do you have kid? (Y/N)")
+		self.child=child_type
 		quit = False
 		max_pay=input('Enter the max payment you can afford every month($):\n')
 		self.price=pd.to_numeric(max_pay)
@@ -37,10 +39,10 @@ class KPS():
 			self.preference = l_type
 			print("You entered: " + self.location[l_type] + "\n\n")
 			while True:
-				print('1.Show security index rank')
+				print('1.Show region crime trend')
 				print('2.Show recommendations for you')
-				print('3.Show the region security report in the recent years')
-				print('4.quit')
+				print('3.Show the region security report')
+				print('4.Quit')
 				x =input()
 				print(self.choose(x))
 
