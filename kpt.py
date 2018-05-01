@@ -29,8 +29,8 @@ class KPS():
 
 
 	def main(self):
-		self.show_security_index_rank()
-		return
+		# self.show_security_index_rank()
+		# return
 		u_type = input("Hi! Welcome to Keep Pitt Safe!\n\nEnter\n1 - Student\n2 - Working Professional\n")
 		self.job = u_type
 		print("You entered: " + self.user[u_type] + "\n\n")
