@@ -7,11 +7,15 @@ import os
 import sys
 import re
 from bs4 import BeautifulSoup as bs
-
-
+import csv
 
 
 def get_historical_data():
+    ''' Reads historical data which was received from data.gov and does following operations
+    drop some columns
+    extract zip codes
+    sort on the basis of zipcode
+    '''
     data = pd.read_csv("historical_data.csv", low_memory=False)
     data=data.drop(['PK', 'CCR','AGE','GENDER','RACE','ARRESTLOCATION','INCIDENTZONE','INCIDENTTRACT','COUNCIL_DISTRICT','PUBLIC_WORKS_DIVISION','INCIDENTNEIGHBORHOOD'], axis=1)
     data = data.rename(columns={'_id': 'original_id', 'ARRESTTIME': 'date','OFFENSES':'type','INCIDENTLOCATION':'address','X':'lat','Y':'long'})
@@ -21,7 +25,6 @@ def get_historical_data():
     data.loc[data['type'].str.contains('Theft'), 'type'] = 'Theft'
     data.loc[data['type'].str.contains('Assult|Theft')==False,'type']='Other'
     data['address'] = data['address'].astype(str).str[:-21]
-# data['zipcode']=pd.to_numeric(data['zipcode'], errors='coerce')
     data.sort_values(by=['zipcode'])
     data=data[data['zipcode'].apply(lambda x : x.isalnum())]
     zipcode_list=data.zipcode.unique()
@@ -29,6 +32,8 @@ def get_historical_data():
 
 
 def get_apt_list():
+    ''' Uses beautiful soup to scrape listings on apartments.com
+    '''
 	titles=list()
     addresses=list()
     zipcodes=list()
@@ -39,7 +44,6 @@ def get_apt_list():
         soup = bs(page, 'html.parser')
         anchors=soup.find_all('a',class_='placardTitle js-placardTitle ')
         anchors2=soup.find_all('div',class_='location')
-#     anchors3=soup.find_all('div').find_all('div',class_='apartmentRentRollupContainer').find_all('span',class_='altRentDisplay')
         for a in anchors:
             if a.has_attr('title'):
                 title=a.get('title')
@@ -53,9 +57,6 @@ def get_apt_list():
         for i in anchor3:
             i=i.text.strip()
             prices.append(i)
-#         str_list = re.split("\s+", i)     
-#         for s in str_list[1:len(str_list)+1]:
-#             prices.append(s)  
     apt_id=list(range(len(titles)))
     apt_list = pd.DataFrame(
         {'id':apt_id,
@@ -66,3 +67,58 @@ def get_apt_list():
         })
     print(apt_list)
     return(apt_list)
+
+
+
+def json_to_csv():
+    ''' 
+    Takes the spotcrime.json file and converts into a csv file
+    '''
+    with open('spotcrime.json', encoding='utf-8') as data_file:
+        crime_parsed = json.loads(data_file.read())
+    print(crime_parsed)
+
+    print(crime_parsed)
+    data_file.close()
+
+    crimes = crime_parsed['crimes']
+    print(crimes)
+
+    crime_csv = open('spotcrime.csv', 'w')
+    csvwriter = csv.writer(crime_csv)
+
+    count = 0
+    for crime in crimes:
+        if count == 0:
+            header = crime.keys()
+            csvwriter.writerow(header)
+            count = count + 1
+        csvwriter.writerow(crime.values())
+    crime_csv.close()
+
+
+def clean_spotcrime_data():
+    ''' Cleans the spotcrime data by dropping and renaming columns
+    '''
+    data = pd.read_csv("spotcrime.csv", low_memory=False)
+    data = data.drop(['link'], axis=1)
+    data = data.rename(columns={'cdid': 'original_id'})
+    data['zipcode']="NA"
+    return data
+
+
+def merge_csv_files():
+    '''Merges the different data csv files into one file'''
+    f1 = open('spotcrime.csv', 'w')
+    f2 = open('historical_data.csv', 'w')
+    files = [f1, f2]
+    merged = []
+    for f in files:
+        filename, ext = os.path.splitext(f)
+        if ext == '.csv':
+            read = pd.read_csv(f)
+            merged.append(read)
+
+    result = pd.concat(merged)
+
+    result.to_csv('merged.csv')
