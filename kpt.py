@@ -36,11 +36,18 @@ class KPS():
 		u_type = input("Hi! Welcome to Keep Pitt Safe!\n\nEnter\n1 - Student\n2 - Working Professional\n")
 		self.job = u_type
 		print("You entered: " + self.user[u_type] + "\n\n")
-		self.child_type = input("Do you have kid? (Y/N)")
+		self.child_type = input("Do you have kid? Please input Y or N: ")
+		
+		if self.child_type.lower()!='y' and self.child_type.lower()!='n' :
+			self.child_type = input("Please input Y or N: ")
 		self.child=self.child_type.lower()
 		if self.child_type.lower()=='y':
 			age=input('Please input your kids age: ')
-			self.age=age
+			if age.isdigit()==True:
+				self.age=age
+			else:
+				age=input('Please input a valid age: ')
+				self.age=age
 		quit = False
 		max_pay=input('Enter the max payment you can afford every month($):\n')
 		self.price=pd.to_numeric(max_pay)
@@ -82,13 +89,13 @@ class KPS():
 			cdm = CDM()
 			school_list = cdm.get_school_list(self.preference,self.age)
 			print("Our school recommendations for you in " + self.location[str(self.preference)] + "\n")
-			print("*****"*10)
-			for i in school_list.items():
-				if len(school_list)==0:
-					print('Sorry, there are no recommendeded school for your child in this region')
-				else:
-					print(school_list)
-			print("*****"*10)
+			print("*****"*20)
+			# for i in school_list.items():
+			if len(school_list)==0:
+				print('Sorry, there are no recommendeded school for your child in this region')
+			else:
+				print(school_list)
+			print("*****"*20)
 
 	def show_security_report(self):
 		if self.preference == "5":
@@ -128,13 +135,13 @@ class KPS():
 		cdm = CDM()
 		apt_list = cdm.get_apt_list(self.preference,self.price)
 		print("Our recommendations for you in " + self.location[str(self.preference)] + "\n")
-		print("*****"*10)
+		print("*****"*20)
 		#for i in apt_list.items():
 		if len(apt_list)==0:
 			print('Sorry, there are no recommendedation for this region')
 		else:
 			print(apt_list)
-		print("*****"*10)
+		print("*****"*20)
 		
 
 	def show_security_index_rank(self):
