@@ -3,3 +3,9 @@ requests
 numpy
 bs4
 plotly
+Json
+urllib.parse
+Os
+Sys
+Re
+

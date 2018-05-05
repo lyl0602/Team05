@@ -4,7 +4,7 @@ This project is the final project of 95880-B4 Python for developers
 
 ****************************************************************************************************
 
-To start this project, please run command in terminal : python kpt.py
+To start this project, please run this command in terminal : python kpt.py
 
 ****************************************************************************************************
 
