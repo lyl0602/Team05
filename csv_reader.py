@@ -67,6 +67,64 @@ class CrimeDataModel():
 
 		return output_dict
 
+
+	def get_school_list(self,x,age):
+		if x=='2':
+		    zipcodes=['15217']
+		elif x=='1':
+		    zipcodes=['15213']
+		elif x=='3':
+		    zipcodes=['15213']
+		elif x=='4':
+		    zipcodes=['15222']
+
+		hill_number=list()
+		hill_address=list()
+		hill_schoolname = list()
+		hill_address_tele=list()
+		for zipcode in zipcodes:
+		    page=requests.get('https://www.publicschoolreview.com/schools-by-distance/%s/5/None/0'%zipcode)
+		    page=page.content
+		    soup = bs(page, 'html.parser')
+		    for span in soup.find_all("span",class_="table_cell_county"):
+		        b=span.get_text().strip()
+		        hill_address_tele.append(b)
+		    for i in hill_address_tele[1:]:
+		        hill_number.append(i[-13:-1])
+		    for i in hill_address_tele[1:]:
+		        if len(i)>33:
+		            hill_address.append(i[:-33])
+		    for span in soup.find_all("span",class_="tooltip"):
+		        b=span.get_text().strip()
+		        hill_schoolname.append(b)
+		a=list(hill_schoolname)
+		b=list(hill_address)
+		c=list(hill_number)
+		
+		hill_school = pd.DataFrame(
+		    {'School name': a,
+		     'Address': b,
+		     'Tele':c
+		    })
+		
+		if int(age)<5 or int(age)>18:
+		    school_list=list()
+		elif age=='5':
+		    school_list=hill_school[hill_school['School name'].str.contains("K-8|K-5")]
+		elif age=='6'or age=='7'or age=='8':
+		    school_list=hill_school[hill_school['School name'].str.contains("K-8|K-5|6-12|6-8")]
+		elif age=='9' or age == '10' or age == '10' or age=='11':
+		    school_list=hill_school[hill_school['School name'].str.contains("K-8|K-5|6-12")]
+		elif age=='12':
+		    school_list=hill_school[hill_school['School name'].str.contains("K-8|6-12|High School")]
+		elif age=='13':
+		    school_list=hill_school[hill_school['School name'].str.contains("K-8")]
+		elif age=='14':
+		    school_list=hill_school[hill_school['School name'].str.contains("K-8|High School")]
+		elif age=='15'or age=='16' or age=='17' or age=='18':
+		    school_list=hill_school[hill_school['School name'].str.contains("High School")]
+		return school_list
+
 	def get_apt_list(self,x,max_price = 0,list_number=20 ):
 		#return the apartment list for certain region
 		#x is the region number

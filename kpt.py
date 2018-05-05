@@ -22,6 +22,8 @@ class KPS():
 		self.job = None
 		self.preference = None
 		self.price=None
+		self.age=None
+		self.child_type=None
 
 
 	def create_array(self):
@@ -34,8 +36,11 @@ class KPS():
 		u_type = input("Hi! Welcome to Keep Pitt Safe!\n\nEnter\n1 - Student\n2 - Working Professional\n")
 		self.job = u_type
 		print("You entered: " + self.user[u_type] + "\n\n")
-		child_type = input("Do you have kid? (Y/N)")
-		self.child=child_type
+		self.child_type = input("Do you have kid? (Y/N)")
+		self.child=self.child_type.lower()
+		if self.child_type.lower()=='y':
+			age=input('Please input your kids age: ')
+			self.age=age
 		quit = False
 		max_pay=input('Enter the max payment you can afford every month($):\n')
 		self.price=pd.to_numeric(max_pay)
@@ -46,9 +51,10 @@ class KPS():
 			print("You entered: " + self.location[l_type] + "\n\n")
 			while True:
 				print('1.Show region crime trend')
-				print('2.Show recommendations for you')
+				print('2.Show recommendationded houses for you')
 				print('3.Show the region security report')
-				print('4.Quit')
+				print('4.Show recommendationded schools for your child')
+				print('5.Quit')
 				x =input()
 				print(self.choose(x))
 
@@ -62,6 +68,27 @@ class KPS():
 			if prompt == "0":
 				return
 			
+	def show_school_list(self):
+		if self.preference == "5":
+			print('which region do you want to look into?')
+			print('1. Shadyside')
+			print('2. Squirrel Hill')
+			print('3. Oakland')
+			print('4. Downtown')
+			region_input=str(input())
+			self.preference = region_input
+
+		if self.child_type=='y':
+			cdm = CDM()
+			school_list = cdm.get_school_list(self.preference,self.age)
+			print("Our school recommendations for you in " + self.location[str(self.preference)] + "\n")
+			print("*****"*10)
+			for i in school_list.items():
+				if len(school_list)==0:
+					print('Sorry, there are no recommendeded school for your child in this region')
+				else:
+					print(school_list)
+			print("*****"*10)
 
 	def show_security_report(self):
 		if self.preference == "5":
@@ -104,7 +131,7 @@ class KPS():
 		print("*****"*10)
 		#for i in apt_list.items():
 		if len(apt_list)==0:
-			print('Sorry, there are no recommendedations for this region')
+			print('Sorry, there are no recommendedation for this region')
 		else:
 			print(apt_list)
 		print("*****"*10)
@@ -151,7 +178,8 @@ class KPS():
 		chooser={
 		    '3':self.show_security_report,
 			'2':self.show_recommend_house,
-			'4':self.quit,
+			'4':self.show_school_list,
+			'5':self.quit,
 		    '1':self.show_security_index_rank
 		}
 		fun=chooser.get(x,lambda:'Invalid input')
