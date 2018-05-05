@@ -15,6 +15,7 @@ from plotly.graph_objs import Pie, Figure, Bar, Layout
 
 region_dict={'1':'Shadyside','2':'Squirrel Hill',"3":"Oakland", "4":"Downtown" ,"5":"No Preference"}
 class KPS():
+	''' This is the main class to run the application'''
 	def __init__(self):
 		self.safety_matrix = np.ndarray(())
 		self.user = {"1":"Student", "2":"Working Professional"}
@@ -25,14 +26,9 @@ class KPS():
 		self.age=None
 		self.child_type=None
 
-
-	def create_array(self):
-		return 
-
-
+		
 	def main(self):
-		# self.show_security_index_rank()
-		# return
+		''' Main function to run the commandline application'''
 		u_type = input("Hi! Welcome to Keep Pitt Safe!\n\nEnter\n1 - Student\n2 - Working Professional\n")
 		if u_type=='1' or u_type=='2':
 			self.job = u_type
@@ -72,18 +68,13 @@ class KPS():
 				print('5.Quit')
 				x =input()
 				print(self.choose(x))
-
-			# cdm = CDM()
-			# count = cdm.get_crime_count(self.location[l_type])
-			# print("Crime count in " + self.location[l_type] + "\n")
-			# for k, v in count.items():
-			# 	print("%s : %s" %(k, v))
 			
 			prompt = input("\n\nEnter\n1 - Go back\n0 - Exit\n\n")
 			if prompt == "0":
 				return
 			
 	def show_school_list(self):
+		''' Depening on user's preference on region, this function prints list of schools'''
 		if self.preference == "5":
 			print('which region do you want to look into?')
 			print('1. Shadyside')
@@ -105,7 +96,10 @@ class KPS():
 				print(school_list)
 			print("*****"*20)
 
+			
 	def show_security_report(self):
+		''' Takes user's region preference and returns a table of crimes
+		It also plots a graph showing the distribution of crimes'''
 		if self.preference == "5":
 			print('Which region do you want to look into?')
 			print('1. Shadyside')
@@ -127,11 +121,9 @@ class KPS():
 		self.plot_graph(keys, values, filename, "Shadyside - Security Report")
 
 
-# how to align these/ print in one line
-# if enter invalid value, add reenter function
 	def show_recommend_house(self):
-		#list_number=input("Please enter the number of recommended houses you want:")
-		list_number=10#pd.to_numeric(list_number)
+		'''Takes user's region preference and prints a table of recommended houses'''
+		list_number=10
 		if self.preference == "5":
 			print('which region do you want to look into?')
 			print('1. Shadyside')
@@ -153,6 +145,7 @@ class KPS():
 		
 
 	def show_security_index_rank(self):
+		''' Generates the distribution of crimes for all regions and types'''
 		print('1 - Squirrel Hill\n2 - Shadyside\n3 - Oakland\n4 - Downtown\n')
 		cdm = CDM()
 		loc = []
@@ -175,6 +168,7 @@ class KPS():
 
 
 	def plot_bar_chart(self, x, y, location):
+		''' Takes data of crimes and location and plots a stacked bar chart'''
 		data = []
 		for i in range(len(x)):
 			trace = Bar(x=x[i], y=y[i], name=location[i])
@@ -190,6 +184,7 @@ class KPS():
 
 
 	def choose(self,x):
+		''' Maps user's choice with different functions '''
 		chooser={
 		    '3':self.show_security_report,
 			'2':self.show_recommend_house,
@@ -202,11 +197,13 @@ class KPS():
 
 
 	def plot_graph(self, labels, values, filename, title):
+		''' Plots a Pie chart '''
 		trace = Pie(labels=labels, values=values)
 		plot([trace], filename=filename)
 
 
 	def quit(self):
+		''' Quits the application'''
 		sys.exit(0)
 		quit=True
 		return
