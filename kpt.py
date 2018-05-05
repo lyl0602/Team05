@@ -34,7 +34,11 @@ class KPS():
 		# self.show_security_index_rank()
 		# return
 		u_type = input("Hi! Welcome to Keep Pitt Safe!\n\nEnter\n1 - Student\n2 - Working Professional\n")
-		self.job = u_type
+		if u_type=='1' or u_type=='2':
+			self.job = u_type
+		else:
+			u_type = input("Please enter valid number:\n1 - Student\n2 - Working Professional\n")
+			self.job=u_type
 		print("You entered: " + self.user[u_type] + "\n\n")
 		self.child_type = input("Do you have kid? Please input Y or N: ")
 		
@@ -50,6 +54,10 @@ class KPS():
 				self.age=age
 		quit = False
 		max_pay=input('Enter the max payment you can afford every month($):\n')
+		if max_pay.isdigit()!=True:
+			max_pay=input('Please enter a valid number:\n')
+		elif int(max_pay)<0:
+			max_pay=input('Please enter a valid number larger than 0:\n')
 		self.price=pd.to_numeric(max_pay)
 		max_pay=pd.to_numeric(max_pay)
 		while True:
