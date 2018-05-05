@@ -85,6 +85,9 @@ class CrimeDataModel():
 	    return data
 
 	def get_school_list(self,x,age):
+		# get the school list in region user selected
+		# x is the region number
+		# age is the user's child's age
 		if x=='2':
 		    zipcodes=['15217']
 		elif x=='1':
@@ -225,20 +228,3 @@ class CrimeDataModel():
 		else:
 			print('Sorry, no this region')
 
-
-
-# 	def get_historical_data(self):
-#     	data = pd.read_csv("historical_data.csv", low_memory=False)
-#     	data=data.drop(['PK', 'CCR','AGE','GENDER','RACE','ARRESTLOCATION','INCIDENTZONE','INCIDENTTRACT','COUNCIL_DISTRICT','PUBLIC_WORKS_DIVISION','INCIDENTNEIGHBORHOOD'], axis=1)
-#     	data = data.rename(columns={'_id': 'original_id', 'ARRESTTIME': 'date','OFFENSES':'type','INCIDENTLOCATION':'address','X':'lat','Y':'long'})
-#     	data['zipcode']=data['address']
-#     	data['zipcode'] = data['zipcode'].astype(str).str[-5:]
-#     	data.loc[data['type'].str.contains('Assault'), 'type'] = 'Assult'
-#     	data.loc[data['type'].str.contains('Theft'), 'type'] = 'Theft'
-#     	data.loc[data['type'].str.contains('Assult|Theft')==False,'type']='Other'
-#     	data['address'] = data['address'].astype(str).str[:-21]
-# # data['zipcode']=pd.to_numeric(data['zipcode'], errors='coerce')
-#     	data.sort_values(by=['zipcode'])
-#     	data=data[data['zipcode'].apply(lambda x : x.isalnum())]
-#     	zipcode_list=data.zipcode.unique()
-#     	return data
