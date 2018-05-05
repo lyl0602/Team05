@@ -2,3 +2,4 @@ pandas
 requests
 numpy
 bs4
+plotly
