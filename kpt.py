@@ -58,16 +58,24 @@ class KPS():
 		max_pay=pd.to_numeric(max_pay)
 		while True:
 			l_type = input("Do you have a preference?\n1 - Shadyside\n2 - Squirrel Hill\n3 - Oakland\n4 - Downtown\n5 - No Preference\n")
-			self.preference = l_type
-			print("You entered: " + self.location[l_type] + "\n\n")
+			if l_type=='1' or l_type=='2' or l_type=='3' or l_type=='4' or l_type=='5':
+				self.preference = l_type
+				print("You entered: " + self.location[l_type] + "\n\n")
+			else:
+				l_type = input('Please input a valid number: \n1 - Shadyside\n2 - Squirrel Hill\n3 - Oakland\n4 - Downtown\n5 - No Preference\n')
+				self.preference = l_type
+				print("You entered: " + self.location[l_type] + "\n\n")
 			while True:
 				print('1.Show region crime trend')
 				print('2.Show recommendationded houses for you')
 				print('3.Show the region security report')
 				print('4.Show recommendationded schools for your child')
 				print('5.Quit')
-				x =input()
-				print(self.choose(x))
+				if l_type=='1' or l_type=='2' or l_type=='3' or l_type=='4' or l_type=='5':
+					x =input()
+					print(self.choose(x))
+				else:
+					x=input('Please input a valid number: ')
 			prompt = input("\n\nEnter\n1 - Go back\n0 - Exit\n\n")
 			if prompt == "0":
 				return
