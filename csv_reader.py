@@ -67,8 +67,7 @@ class CrimeDataModel():
 
 		return output_dict
 
-		
-    def get_historical_data(self):
+	def get_historical_data(self):
 	    data = pd.read_csv("historical_data.csv", low_memory=False)
 	    data=data.drop(['PK', 'CCR','AGE','GENDER','RACE','ARRESTLOCATION','INCIDENTZONE','INCIDENTTRACT','COUNCIL_DISTRICT','PUBLIC_WORKS_DIVISION','INCIDENTNEIGHBORHOOD'], axis=1)
 	    data = data.rename(columns={'_id': 'original_id', 'ARRESTTIME': 'date','OFFENSES':'type','INCIDENTLOCATION':'address','X':'lat','Y':'long'})

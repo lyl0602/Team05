@@ -68,7 +68,6 @@ class KPS():
 				print('5.Quit')
 				x =input()
 				print(self.choose(x))
-			
 			prompt = input("\n\nEnter\n1 - Go back\n0 - Exit\n\n")
 			if prompt == "0":
 				return
